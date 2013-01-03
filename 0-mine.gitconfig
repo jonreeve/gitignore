@@ -10,24 +10,31 @@
 [branch]
 	autosetuprebase = always # automatically set up new tracked branches to rebase not merge - avoid merge commits!
 [alias]
-	unstage = reset HEAD
-	unadd = reset HEAD
-	ls = ls-files
-	co = checkout
-	lol = log --graph --decorate --pretty=oneline --abbrev-commit
-	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-	gpush = "!f() { git push $1 $2:refs/for/$2; }; f" # gerrit push
-	svnup = "!f() { git svn fetch && git svn rebase; }; f" # svn fetch and rebase in one :)
-	svncommit = "!f() { git svnup && git svn dcommit; }; f" # svn update then commit if all went well
-	up = pull origin
-	st = status
-	df = diff
-	ct = commit
-	br = branch
-	s = stash
-	pp = "!f() { git pull --rebase $1 && git push $1; }; f" # avoid merge commits - pull rebase then push if it was all ok
-	mf = merge --ff-only # avoid merge commits - use this instead of merge. If I check out master, pull down changes that aren't in the feature branch, and then merge the feature, I might get a merge commit, if I don't use this
-	addi = add --interactive
-	undocommit = reset --soft HEAD^
-	undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
-	svnrev = "!f(){ git checkout $(git log --pretty=oneline --grep "@$1" | cut -d' ' -f1); }; f" # checkout an svn revision
+        unstage = reset HEAD
+        unadd = reset HEAD
+        ls = ls-files
+        co = checkout
+        lol = log --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+        up = pull origin
+        st = status
+        stat = status
+        df = diff
+        d = diff
+        ct = commit
+        c = commit
+        br = branch
+        s = stash
+        pp = "!f() { git pull --rebase $1 && git push $1; }; f" # avoid merge commits - pull rebase then push if it was all ok
+        mf = merge --ff-only # avoid merge commits - use this instead of merge. If I check out master, pull down changes that aren't in the feature branch, and then merge the feature, I might get a merge commit, if I don't use this
+        addi = add --interactive
+        undocommit = reset --soft HEAD^
+        undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
+
+        #### gerrit
+        # gpush = "!f() { git push $1 $2:refs/for/$2; }; f" # gerrit push
+        #### git svn
+        # svnup = "!f() { git svn fetch && git svn rebase; }; f" # svn fetch and rebase in one :)
+        # svncommit = "!f() { git svnup && git svn dcommit; }; f" # svn update then commit if all went well
+        # svnrev = "!f(){ git checkout $(git log --pretty=oneline --grep "@$1" | cut -d' ' -f1); }; f" # checkout an svn revision
+
