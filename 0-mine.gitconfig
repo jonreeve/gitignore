@@ -27,9 +27,11 @@
         c = commit
         br = branch
         s = stash
+        pr = pull --rebase # avoid merge commits, because pull merging by default usually sucks
         pp = "!f() { git pull --rebase $1 && git push $1; }; f" # avoid merge commits - pull rebase then push if it was all ok
         mf = merge --ff-only # avoid merge commits - use this instead of merge. If I check out master, pull down changes that aren't in the feature branch, and then merge the feature, I might get a merge commit, if I don't use this
         addi = add --interactive
+        ai = add --interactive
         undocommit = reset --soft HEAD^
         undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
 
