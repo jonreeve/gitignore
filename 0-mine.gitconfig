@@ -1,11 +1,13 @@
 [user]
 	name = Jon Reeve
 [color]
-	ui = auto
+	ui = true
 [merge]
 	summary = true
 [core]
-	excludesfile = /home/jreeve/.gitignore
+	excludesfile = /home/jon/.gitignore
+	attributesfile = /home/jon/.gitattributes
+	editor = vim
 #	pager = most +s +'/---' # use more as pager and jump to first change, then hitting 'n' will step to next change
 [branch]
 	autosetuprebase = always # automatically set up new tracked branches to rebase not merge - avoid merge commits!
@@ -17,7 +19,8 @@
         lol = log --graph --decorate --pretty=oneline --abbrev-commit
         lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
         lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
-        lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+        lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+        overview = log --graph --simplify-by-decoration --decorate --all --pretty=format:'%cd%Cgreen%d %Cblue%h %Creset%s' --date=short
         up = pull origin
         st = status
         stat = status
@@ -25,6 +28,7 @@
         d = diff
         ct = commit
         c = commit
+        cp = cherry-pick
         br = branch
         s = stash
         pr = pull --rebase # avoid merge commits, because pull merging by default usually sucks
@@ -42,3 +46,9 @@
         # svncommit = "!f() { git svnup && git svn dcommit; }; f" # svn update then commit if all went well
         # svnrev = "!f(){ git checkout $(git log --pretty=oneline --grep "@$1" | cut -d' ' -f1); }; f" # checkout an svn revision
 
+[push]
+	default = simple
+[diff "exif"]
+	textconv = exiftool
+[diff "word"]
+	textconv = strings
