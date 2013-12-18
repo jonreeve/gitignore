@@ -1,9 +1,17 @@
 [user]
 	name = Jon Reeve
+[diff]
+#	external = /home/jon/bin/git-diff-with-meld.py
+	tool = meld
+	prompt = false
 [color]
-	ui = true
+	ui = auto
 [merge]
 	summary = true
+	tool = meld
+	prompt = false
+	keepBackup = false
+	keepTemporaries = false
 [core]
 	excludesfile = /home/jon/.gitignore
 	attributesfile = /home/jon/.gitattributes
@@ -28,6 +36,7 @@
         d = diff
         ct = commit
         c = commit
+        am = commit --amend
         cp = cherry-pick
         br = branch
         s = stash
@@ -38,13 +47,21 @@
         ai = add --interactive
         undocommit = reset --soft HEAD^
         undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
+        ctdate = "!f() { GIT_COMMITER_DATE="$1" git commit --date="$1" }; f" # commit with supplied date
+        amdate = "!f() { GIT_COMMITER_DATE="$1" git commit --amend --date="$1" }; f" # amend last commit with supplied date
 
         #### gerrit
         # gpush = "!f() { git push $1 $2:refs/for/$2; }; f" # gerrit push
         #### git svn
         # svnup = "!f() { git svn fetch && git svn rebase; }; f" # svn fetch and rebase in one :)
         # svncommit = "!f() { git svnup && git svn dcommit; }; f" # svn update then commit if all went well
-        # svnrev = "!f(){ git checkout $(git log --pretty=oneline --grep "@$1" | cut -d' ' -f1); }; f" # checkout an svn revision
+        # svnrev = "!f(){ git checkout $(git log --pretty=oneline --grep "@$1" | cut -d' ' -f1); }; f" # c
+[advice]
+        pushNonFastForward = false
+        statusHints = false
+        commitBeforeMerge = false
+        resolveConflict = false
+        detachedHead = false
 
 [push]
 	default = simple
@@ -52,3 +69,6 @@
 	textconv = exiftool
 [diff "word"]
 	textconv = strings
+[gui]
+	editor = subl
+	historybrowser = gitk
