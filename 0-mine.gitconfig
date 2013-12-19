@@ -26,7 +26,8 @@
         co = checkout
         lol = log --graph --decorate --pretty=oneline --abbrev-commit
         lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-        lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
+        lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ai)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
+        lgr = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
         lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
         overview = log --graph --simplify-by-decoration --decorate --all --pretty=format:'%cd%Cgreen%d %Cblue%h %Creset%s' --date=short
         up = pull origin
