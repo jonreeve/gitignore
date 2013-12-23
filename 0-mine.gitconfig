@@ -48,8 +48,8 @@
         ai = add --interactive
         undocommit = reset --soft HEAD^
         undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
-        ctdate = "!f() { GIT_COMMITER_DATE="$1" git commit --date="$1" }; f" # commit with supplied date
-        amdate = "!f() { GIT_COMMITER_DATE="$1" git commit --amend --date="$1" }; f" # amend last commit with supplied date
+        ctdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --date=\"$1\"; }; f" # commit with supplied date
+        amdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --amend --date=\"$1\"; }; f" # amend last commit with supplied date
 
         #### gerrit
         # gpush = "!f() { git push $1 $2:refs/for/$2; }; f" # gerrit push
