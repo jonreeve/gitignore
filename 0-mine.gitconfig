@@ -20,16 +20,54 @@
 [branch]
 	autosetuprebase = always # automatically set up new tracked branches to rebase not merge - avoid merge commits!
 [alias]
+        branch-name = "!git rev-parse --abbrev-ref HEAD"
+
+        # Push the current branch to the remote "origin", and set it to track the upstream branch
+        publish = "!git push -u origin $(git branch-name)"
+        pub = publish
+        po = publish
+        # Delete the remote version of the current branch
+        unpublish = "!git push origin :$(git branch-name)"
+        # Review all changes on the current branch
+        code-review = difftool origin/develop...
+
+        # Given a merge commit, find the span of commits that exist(ed) on that branch. Used by other aliases.
+        merge-span = "!f() { echo $(git log -1 $2 --merges --pretty=format:%P | cut -d' ' -f1)$1$(git log -1 $2 --merges --pretty=format:%P | cut -d' ' -f2); }; f"
+
+        # Find the commits that were introduced by a merge
+        merge-log = "!git log `git merge-span .. $1`"
+        # Show the changes that were introduced by a merge
+        merge-diff = "!git diff `git merge-span ... $1`"
+        # As above, but in your difftool
+        merge-difftool = "!git difftool `git merge-span ... $1`"
+
+        # Interactively rebase all the commits on the current branch
+        rebase-branch = "!git rebase -i `git merge-base master HEAD`"
+
+        # Unstage any files that have been added to the staging area
         unstage = reset HEAD
         unadd = reset HEAD
+
+        # Checkout our version of a file and add it
+        ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+        # Checkout their version of a file and add it
+        theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
+        # Delete any branches that have been merged into master
+        # See also: https://gist.github.com/robmiller/5133264
+        delete-merged-branches = "!git co master && git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
         ls = ls-files
         co = checkout
-        lol = log --graph --decorate --pretty=oneline --abbrev-commit
-        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+        # Various pretty log graphs
         lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ai)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
         lgr = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit --date=relative
         lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
         overview = log --graph --simplify-by-decoration --decorate --all --pretty=format:'%cd%Cgreen%d %Cblue%h %Creset%s' --date=short
+
+        f = fetch
+        fp = fetch --prune
         up = pull origin
         st = status
         stat = status
@@ -37,19 +75,24 @@
         d = diff
         ct = commit
         c = commit
-        am = commit --amend
         cp = cherry-pick
-        br = branch
+        cpx = cherry-pick --no-commit
+        b = branch
+        br = branch --remote
         s = stash
         pr = pull --rebase # avoid merge commits, because pull merging by default usually sucks
-        pp = "!f() { git pull --rebase $1 && git push $1; }; f" # avoid merge commits - pull rebase then push if it was all ok
+        #pp = "!f() { git pull --rebase $1 && git push $1; }; f" # avoid merge commits - pull rebase then push if it was all ok
         mf = merge --ff-only # avoid merge commits - use this instead of merge. If I check out master, pull down changes that aren't in the feature branch, and then merge the feature, I might get a merge commit, if I don't use this
         addi = add --interactive
         ai = add --interactive
-        undocommit = reset --soft HEAD^
+        uncommit = reset --soft HEAD^
         undelete = "!f() { git reset HEAD \"$1\" && git checkout \"$1\"; }; f" # unadd and checkout a file
-        ctdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --date=\"$1\"; }; f" # commit with supplied date
-        amdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --amend --date=\"$1\"; }; f" # amend last commit with supplied date
+
+        # Be very careful with these ones - overriding the GIT_COMMITER_DATE is frowned upon - make sure there's a damn good reason
+        ctdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --date=\"$1\"; }; f" # commit with supplied date        
+        amdate = "!d=\"$1\" && shift && git diff-index --cached --quiet HEAD --ignore-submodules -- && \
+        GIT_COMMITTER_DATE=\"$d\" git commit --amend -C HEAD --date \"$d\"" || echo >&2 "error: date change failed: index not clean!"
+        # amdate = "!f() { GIT_COMMITER_DATE=\"$1\" git commit --amend --date=\"$1\"; }; f" # amend last commit with supplied date
 
         #### gerrit
         # gpush = "!f() { git push $1 $2:refs/for/$2; }; f" # gerrit push
